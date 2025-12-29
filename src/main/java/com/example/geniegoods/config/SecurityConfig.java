@@ -1,5 +1,7 @@
 package com.example.geniegoods.config;
 
+import com.example.geniegoods.security.OAuth2SuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +17,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -23,8 +28,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // React + JWT 방식이라 CSRF 비활성화
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/members/**").permitAll() // 로그인 엔드포인트 허용
+                        .requestMatchers("/api/auth/**", "/api/members/**", "/oauth2/**", "/login/oauth2/**").permitAll() // OAuth2 엔드포인트 허용
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2SuccessHandler) // OAuth2 성공 핸들러 설정
                 );
 
         return http.build();

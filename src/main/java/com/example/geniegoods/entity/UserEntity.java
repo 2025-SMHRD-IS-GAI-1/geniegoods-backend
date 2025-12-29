@@ -34,7 +34,7 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
@@ -43,7 +43,7 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String socialId;
 
-    @Column(nullable = false)
+    @Column
     private String profileUrl;
 
     @Column(nullable = false, length = 50)
