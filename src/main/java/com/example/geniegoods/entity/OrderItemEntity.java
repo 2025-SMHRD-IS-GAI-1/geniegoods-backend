@@ -20,7 +20,7 @@ public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long orderId;
+    private Long orderItemId;
 
     @Column(nullable = false)
     private Long quantity;
