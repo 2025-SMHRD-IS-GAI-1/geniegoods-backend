@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // React + JWT 방식이라 CSRF 비활성화
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/members/**", "/oauth2/**", "/login/oauth2/**").permitAll() // OAuth2 엔드포인트 허용
+                        .requestMatchers("/api/**", "/oauth2/**", "/login/oauth2/**").permitAll() // OAuth2 엔드포인트 허용
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

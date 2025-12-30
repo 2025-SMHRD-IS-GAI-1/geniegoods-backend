@@ -1,5 +1,6 @@
 package com.example.geniegoods.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,48 +12,32 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "TB_GOODS")
+@Table(name = "TB_UPLOAD_IMG")
 @EntityListeners(AuditingEntityListener.class)
 @ToString
 @Builder
-public class GoodsEntity {
-
+public class UploadImgEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long goodsId;
+    private Long uploadId;
 
     @Column(nullable = false)
-    private String goodsUrl;
-
-    @Column
-    private String goodsStyle;
-
-    @Column
-    private String goodsTone;
-
-    @Column
-    private String goodsMood;
+    private String uploadImgUrl;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime uploadedAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private Long goodsImgSize;
-
-    @Column(nullable = false)
-    private String prompt;
+    private Long uploadImgSize;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToOne
-    @JoinColumn(name = "upload_group_id") // DB의 FK 컬럼명
+    @ManyToOne
+    @JoinColumn(name = "upload_group_id")
     private UploadImgGroupEntity uploadImgGroupEntity;
 
-    @OneToOne
-    @JoinColumn(name = "category_id") // DB의 FK 컬럼명
-    private GoodsCategoryEntity goodsCategoryEntity;
 
 }

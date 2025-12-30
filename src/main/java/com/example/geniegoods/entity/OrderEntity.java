@@ -11,48 +11,36 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "TB_GOODS")
+@Table(name = "TB_ORDER")
 @EntityListeners(AuditingEntityListener.class)
 @ToString
 @Builder
-public class GoodsEntity {
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long goodsId;
+    private Long orderId;
 
     @Column(nullable = false)
-    private String goodsUrl;
-
-    @Column
-    private String goodsStyle;
-
-    @Column
-    private String goodsTone;
-
-    @Column
-    private String goodsMood;
+    private LocalDateTime orderedAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Long totalAmount;
 
     @Column(nullable = false)
-    private Long goodsImgSize;
+    private String status;
 
     @Column(nullable = false)
-    private String prompt;
+    private String zipcode;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = true)
+    private String detailAddress;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
-
-    @OneToOne
-    @JoinColumn(name = "upload_group_id") // DB의 FK 컬럼명
-    private UploadImgGroupEntity uploadImgGroupEntity;
-
-    @OneToOne
-    @JoinColumn(name = "category_id") // DB의 FK 컬럼명
-    private GoodsCategoryEntity goodsCategoryEntity;
-
 }
