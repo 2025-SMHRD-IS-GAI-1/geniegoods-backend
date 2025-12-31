@@ -2,6 +2,7 @@ package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -22,11 +23,12 @@ public class PaymentEntity {
     @Column(nullable = false)
     private Long paymentId;
 
+    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime paymentAt = LocalDateTime.now();
+    private LocalDateTime paymentAt;
 
     @Column(nullable = false)
-    private Long amonut;
+    private Long amount;
 
     @Column(nullable = false)
     private String method;
@@ -35,7 +37,7 @@ public class PaymentEntity {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
 }

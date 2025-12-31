@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GoodsRestController {
 
-    private GoodsService goodsService;
+    private final GoodsService goodsService;
 
     @GetMapping("/test")
     // 로그인한 유저 정보 얻고싶을때 @AuthenticationPrincipal UserEntity user 이렇게 할것
