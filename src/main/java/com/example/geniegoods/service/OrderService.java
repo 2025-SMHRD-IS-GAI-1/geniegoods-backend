@@ -1,13 +1,8 @@
-// com.example.geniegoods.service.OrderService.java
-
 package com.example.geniegoods.service;
 
 import com.example.geniegoods.dto.OrderRequestDto;
 import com.example.geniegoods.dto.OrderRequestDto;
-import com.example.geniegoods.entity.GoodsEntity;
-import com.example.geniegoods.entity.GoodsCategoryEntity;
-import com.example.geniegoods.entity.OrderEntity;
-import com.example.geniegoods.entity.OrderItemEntity;
+import com.example.geniegoods.entity.*;
 import com.example.geniegoods.repository.GoodsRepository;
 import com.example.geniegoods.repository.OrderItemRepository;
 import com.example.geniegoods.repository.OrderRepository;
@@ -30,7 +25,8 @@ public class OrderService {
 
     private static final int SHIPPING_FEE = 3000;
 
-    public OrderEntity createOrder(Long userId, OrderRequestDto dto) {
+    @Transactional
+    public OrderEntity createOrder(UserEntity user, OrderRequestDto dto) {
 
         // ====================== 1. 입력 검증 (필수!) ======================
         if (dto == null) {
@@ -53,13 +49,17 @@ public class OrderService {
 
         // 주문 기본 정보 생성
         OrderEntity order = OrderEntity.builder()
-                .userId(userId)
+                .user(user)
                 .orderedAt(LocalDateTime.now())
                 .status("PENDING")
                 .zipcode(dto.getZipcode().trim())
                 .address(dto.getAddress().trim())
+                .totalAmount(0)
                 .detailAddress(dto.getDetailAddress() != null ? dto.getDetailAddress().trim() : null)
                 .build();
+
+        // 반드시 먼저 저장
+        orderRepository.save(order);
 
         int subtotal = 0;
 
@@ -92,8 +92,7 @@ public class OrderService {
                     .priceAtOrder(categoryPrice)  // 주문 당시 가격 스냅샷
                     .order(order)
                     .build();
-            
-            
+
             orderItemRepository.save(orderItem);
             
             // 소계 누적
@@ -103,7 +102,6 @@ public class OrderService {
         // 총 금액 계산 (상품 합계 + 배송비)
         order.setTotalAmount(subtotal + SHIPPING_FEE);
 
-        // 저장 (cascade로 OrderItem도 함께 저장됨)
-        return orderRepository.save(order);
+        return order;
     }
 }

@@ -2,6 +2,7 @@ package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,8 +32,9 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String nickname;
 
+    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column
     private LocalDateTime updatedAt;
@@ -46,8 +48,10 @@ public class UserEntity implements UserDetails {
     @Column
     private String profileUrl;
 
+    @Builder.Default
     @Column(nullable = false, length = 50)
-    private String role = "USER"; 
+    @org.hibernate.annotations.ColumnDefault("'USER'")
+    private String role = "USER";
 
     /**
      * 사용자 권한 반환

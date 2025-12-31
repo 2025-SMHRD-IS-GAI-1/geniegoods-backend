@@ -1,5 +1,3 @@
-// com.example.geniegoods.entity.GoodsCategoryEntity.java
-
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
@@ -15,8 +13,9 @@ import lombok.*;
 public class GoodsCategoryEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CATEGORY_ID")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Column(name = "KOREAN_NAME")
     private String koreanName;

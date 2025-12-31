@@ -3,6 +3,7 @@ package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class UploadImgEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -25,19 +27,18 @@ public class UploadImgEntity {
     @Column(nullable = false)
     private String uploadImgUrl;
 
+    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime uploadedAt = LocalDateTime.now();
+    private LocalDateTime uploadedAt;
 
     @Column(nullable = false)
     private Long uploadImgSize;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "upload_group_id")
+    @JoinColumn(name = "upload_group_id", nullable = false)
     private UploadImgGroupEntity uploadImgGroupEntity;
-
-
 }

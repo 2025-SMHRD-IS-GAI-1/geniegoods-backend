@@ -1,9 +1,9 @@
-// com.example.geniegoods.entity.OrderEntity.java
-
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,11 @@ import java.util.List;
 public class OrderEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_ID")
     private Long orderId;
 
+    @CreatedDate
     @Column(name = "ORDERED_AT")
     private LocalDateTime orderedAt;
 
@@ -39,6 +41,7 @@ public class OrderEntity {
     @Column(name = "DETAIL_ADDRESS")
     private String detailAddress;
 
-    @Column(name = "USER_ID")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private UserEntity user;
 }

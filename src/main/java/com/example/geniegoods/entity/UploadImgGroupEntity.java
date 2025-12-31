@@ -3,6 +3,7 @@ package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,8 @@ public class UploadImgGroupEntity {
     @Column(nullable = false)
     private Long uploadGroupId;
 
+    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
 }

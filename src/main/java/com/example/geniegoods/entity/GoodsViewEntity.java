@@ -2,6 +2,7 @@ package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -22,15 +23,16 @@ public class GoodsViewEntity {
     @Column(nullable = false)
     private Long goodsViewId;
 
+    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime viewedAt = LocalDateTime.now();
+    private LocalDateTime viewedAt;
 
     @ManyToOne
-    @JoinColumn(name = "goods_id")
+    @JoinColumn(name = "goods_id", nullable = false)
     private GoodsEntity goodsEntity;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private GoodsViewEntity goodsViewEntity;
 
 }

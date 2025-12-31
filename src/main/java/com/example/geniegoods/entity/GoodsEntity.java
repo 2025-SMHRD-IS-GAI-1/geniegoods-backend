@@ -1,9 +1,9 @@
-// com.example.geniegoods.entity.GoodsEntity.java
-
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class GoodsEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "GOODS_ID")
     private Long goodsId;
 
@@ -31,6 +32,7 @@ public class GoodsEntity {
     @Column(name = "GOODS_MOOD")
     private String goodsMood;
 
+    @CreatedDate
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
@@ -40,18 +42,21 @@ public class GoodsEntity {
     @Column(name = "PROMPT")
     private String prompt;
 
-    @Column(name = "USER_ID")
-    private Integer userId;  // FK지만 연관관계 안 걸어도 됨 (성능상)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private UserEntity user;
 
-    @Column(name = "UPLOAD_GROUP_ID")
-    private Integer uploadGroupId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UPLOAD_GROUP_ID", insertable = false, updatable = false, nullable = false)
+    private UploadImgGroupEntity uploadImgGroupEntity;
 
     // 연관관계 (필요시)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID")
+    @JoinColumn(name = "CATEGORY_ID", nullable = false)
     private GoodsCategoryEntity goodsCategoryEntity;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UPLOAD_GROUP_ID", insertable = false, updatable = false)
-    private UploadImgGroupEntity uploadImgGroupEntity;
+
+
+
+
 }
