@@ -19,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserRestController {
 
-    private UserService userService;
+    private final UserService userService;
 
     /**
      * 토큰 발급 (포스트맨 테스트용)
