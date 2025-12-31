@@ -1,28 +1,26 @@
+// com.example.geniegoods.entity.GoodsCategoryEntity.java
+
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "TB_GOODS_CATEGORY")
-@EntityListeners(AuditingEntityListener.class)
-@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "TB_GOODS_CATEGORY")
 public class GoodsCategoryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long categoryId;
+    @Column(name = "CATEGORY_ID")
+    private Integer categoryId;
 
-    @Column(nullable = false)
+    @Column(name = "KOREAN_NAME")
     private String koreanName;
 
-    @Column(nullable = false)
-    private int price;
+    @Column(name = "PRICE")
+    private Integer price;  // int로 맞춤
 }

@@ -1,39 +1,34 @@
+// com.example.geniegoods.entity.OrderItemEntity.java
+
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "TB_ORDER_ITEM")
-@EntityListeners(AuditingEntityListener.class)
-@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "TB_ORDER_ITEM")
 public class OrderItemEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "ORDER_ITEM_ID")
     private Long orderItemId;
 
-    @Column(nullable = false)
-    private Long quantity;
+    @Column(name = "QUANTITY", nullable = false)
+    private Integer quantity;
 
-    @Column(nullable = false)
-    private Long priceAtOrder;
+    @Column(name = "PRICE_AT_ORDER")
+    private Integer priceAtOrder;  // 주문 당시 가격 스냅샷!!
 
-    @ManyToOne
-    @JoinColumn(name = "goods_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GOODS_ID")
     private GoodsEntity goods;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;
-
 }

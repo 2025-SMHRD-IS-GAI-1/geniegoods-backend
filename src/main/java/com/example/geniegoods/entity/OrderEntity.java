@@ -1,46 +1,44 @@
+// com.example.geniegoods.entity.OrderEntity.java
+
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "TB_ORDER")
-@EntityListeners(AuditingEntityListener.class)
-@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "TB_ORDER")
 public class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "ORDER_ID")
     private Long orderId;
 
-    @Column(nullable = false)
-    private LocalDateTime orderedAt = LocalDateTime.now();
+    @Column(name = "ORDERED_AT")
+    private LocalDateTime orderedAt;
 
-    @Column(nullable = false)
-    private Long totalAmount;
+    @Column(name = "TOTAL_AMOUNT")
+    private Integer totalAmount;
 
-    @Column(nullable = false)
+    @Column(name = "STATUS")
     private String status;
 
-    @Column(nullable = false)
+    @Column(name = "ZIPCODE")
     private String zipcode;
 
-    @Column(nullable = false)
+    @Column(name = "ADDRESS")
     private String address;
 
-    @Column(nullable = true)
+    @Column(name = "DETAIL_ADDRESS")
     private String detailAddress;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @Column(name = "USER_ID")
+    private Long userId;
 }

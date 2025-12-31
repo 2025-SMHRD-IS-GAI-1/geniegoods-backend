@@ -1,58 +1,57 @@
+// com.example.geniegoods.entity.GoodsEntity.java
+
 package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "TB_GOODS")
-@EntityListeners(AuditingEntityListener.class)
-@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "TB_GOODS")
 public class GoodsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "GOODS_ID")
     private Long goodsId;
 
-    @Column(nullable = false)
+    @Column(name = "GOODS_URL")
     private String goodsUrl;
 
-    @Column
+    @Column(name = "GOODS_STYLE")
     private String goodsStyle;
 
-    @Column
+    @Column(name = "GOODS_TONE")
     private String goodsTone;
 
-    @Column
+    @Column(name = "GOODS_MOOD")
     private String goodsMood;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "CREATED_AT")
+    private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "GOODS_IMG_SIZE")
     private Long goodsImgSize;
 
-    @Column(nullable = false)
+    @Column(name = "PROMPT")
     private String prompt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @Column(name = "USER_ID")
+    private Integer userId;  // FK지만 연관관계 안 걸어도 됨 (성능상)
 
-    @OneToOne
-    @JoinColumn(name = "upload_group_id") // DB의 FK 컬럼명
-    private UploadImgGroupEntity uploadImgGroupEntity;
+    @Column(name = "UPLOAD_GROUP_ID")
+    private Integer uploadGroupId;
 
-    @OneToOne
-    @JoinColumn(name = "category_id") // DB의 FK 컬럼명
+    // 연관관계 (필요시)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_ID")
     private GoodsCategoryEntity goodsCategoryEntity;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UPLOAD_GROUP_ID", insertable = false, updatable = false)
+    private UploadImgGroupEntity uploadImgGroupEntity;
 }
