@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderRequestDto {
 
     // 검증 어노테이션 모두 제거 → 그냥 필드만 남김
-    private List<OrderItemDto> items = new ArrayList<>();
+    private List<OrderItemDto> items;
 
     private String zipcode;
 

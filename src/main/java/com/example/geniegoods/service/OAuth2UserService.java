@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * OAuth2 사용자 정보 처리 서비스
@@ -36,17 +37,11 @@ public class OAuth2UserService {
 		
 		// 기존 사용자 조회
 		Optional<UserEntity> existingUser = userRepository.findBySocialTypeAndSocialId(socialType, socialId);
-		
-		if (existingUser.isPresent()) {
-			// 기존 사용자 정보 업데이트
-			UserEntity user = existingUser.get();
-			updateUserInfo(user, oauth2User, registrationId);
-			return userRepository.save(user);
-		} else {
-			// 신규 사용자 생성
-			return createNewUser(oauth2User, socialType, socialId, registrationId);
-		}
-	}
+
+        // 신규 사용자 생성
+        return existingUser.orElseGet(() -> createNewUser(oauth2User, socialType, socialId, registrationId));
+
+    }
 
 	/**
 	 * 소셜 ID 추출 (제공자별로 다름)
@@ -68,54 +63,37 @@ public class OAuth2UserService {
 	/**
 	 * 사용자 정보 추출 (제공자별로 다름)
 	 */
-	private UserInfo extractUserInfo(OAuth2User oauth2User, String registrationId) {
+	private String extractUserInfo(OAuth2User oauth2User, String registrationId) {
 		Map<String, Object> attributes = oauth2User.getAttributes();
-		
-		return switch (registrationId.toLowerCase()) {
-			case "google" -> new UserInfo(
-					(String) attributes.get("name"),
-					(String) attributes.get("picture")
-			);
+
+		switch (registrationId.toLowerCase()) {
+			case "google" -> {
+				return (String) attributes.get("name");
+			}
 			case "kakao" -> {
 				Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
 				Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-				yield new UserInfo(
-						(String) profile.get("nickname"),
-						(String) profile.get("profile_image_url")
-				);
+				return (String) profile.get("nickname");
 			}
 			case "naver" -> {
 				Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-				yield new UserInfo(
-						(String) response.get("name"),
-						(String) response.get("profile_image")
-				);
+				return (String) response.get("name");
 			}
 			default -> throw new IllegalArgumentException("지원하지 않는 소셜 로그인입니다: " + registrationId);
-		};
+		}
 	}
 
-	/**
-	 * 기존 사용자 정보 업데이트
-	 */
-	private void updateUserInfo(UserEntity user, OAuth2User oauth2User, String registrationId) {
-		UserInfo userInfo = extractUserInfo(oauth2User, registrationId);
-		user.setNickname(userInfo.nickname());
-		user.setProfileUrl(userInfo.profileUrl() != null ? userInfo.profileUrl() : "");
-		user.setUpdatedAt(LocalDateTime.now());
-	}
 
 	/**
 	 * 신규 사용자 생성
 	 */
 	private UserEntity createNewUser(OAuth2User oauth2User, String socialType, String socialId, String registrationId) {
-		UserInfo userInfo = extractUserInfo(oauth2User, registrationId);
+		String nickname = extractUserInfo(oauth2User, registrationId);
 		
 		UserEntity newUser = UserEntity.builder()
-				.nickname(userInfo.nickname())
+				.nickname(nickname)
 				.socialType(socialType)
 				.socialId(socialId)
-				.profileUrl(userInfo.profileUrl() != null ? userInfo.profileUrl() : "")
 				.role("USER")
 				.createdAt(LocalDateTime.now())
 				.build();
@@ -123,9 +101,5 @@ public class OAuth2UserService {
 		return userRepository.save(newUser);
 	}
 
-	/**
-	 * 사용자 정보 DTO
-	 */
-	private record UserInfo(String nickname, String profileUrl) {}
 }
 

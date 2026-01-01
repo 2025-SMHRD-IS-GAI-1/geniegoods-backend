@@ -47,9 +47,13 @@ public class OrderService {
         }
         // =================================================================
 
+        // 주문번호 생성 (날짜 + 순번 형식: YYYYMMDD-XXX)
+        String orderNumber = generateOrderNumber();
+
         // 주문 기본 정보 생성
         OrderEntity order = OrderEntity.builder()
                 .user(user)
+                .orderNumber(orderNumber)
                 .orderedAt(LocalDateTime.now())
                 .status("PENDING")
                 .zipcode(dto.getZipcode().trim())
@@ -103,5 +107,23 @@ public class OrderService {
         order.setTotalAmount(subtotal + SHIPPING_FEE);
 
         return order;
+    }
+
+    /**
+     * 주문번호 생성
+     * 형식: YYYYMMDD-XXX (예: 20240512-001)
+     * 같은 날짜의 주문이 여러 개일 경우 순번이 증가
+     */
+    private String generateOrderNumber() {
+        LocalDateTime now = LocalDateTime.now();
+        String datePrefix = now.format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        
+        // 오늘 날짜로 시작하는 주문번호 개수 조회
+        long todayOrderCount = orderRepository.countByOrderNumberStartingWith(datePrefix);
+        
+        // 순번 생성 (001, 002, 003 ...)
+        String sequence = String.format("%03d", todayOrderCount + 1);
+        
+        return datePrefix + "-" + sequence;
     }
 }

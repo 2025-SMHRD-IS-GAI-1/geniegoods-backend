@@ -16,6 +16,7 @@ import java.util.List;
 public class OrderResponseDto {
 
     private Long orderId;                    // TB_ORDER.ORDER_ID
+    private String orderNumber;              // 주문번호 (예: 20240512-001)
     private LocalDateTime orderedAt;         // 주문일시
     private Integer totalAmount;             // 총 금액 (상품 합계 + 배송비)
     private String status;                   // 주문 상태 (PENDING, PAID 등)
@@ -23,7 +24,7 @@ public class OrderResponseDto {
     private String address;
     private String detailAddress;
 
-    private List<OrderItemResponseDto> items = new ArrayList<>();
+    private List<OrderItemResponseDto> items;
 
     // 주문 상품 하나당 정보
     @Getter

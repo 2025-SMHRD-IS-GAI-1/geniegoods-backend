@@ -17,11 +17,4 @@ public class GoodsRestController {
 
     private final GoodsService goodsService;
 
-    @GetMapping("/test")
-    // 로그인한 유저 정보 얻고싶을때 @AuthenticationPrincipal UserEntity user 이렇게 할것
-    public ResponseEntity<UserEntity> test(@AuthenticationPrincipal UserEntity user) {
-
-        return ResponseEntity.ok(user);
-    }
-
 }

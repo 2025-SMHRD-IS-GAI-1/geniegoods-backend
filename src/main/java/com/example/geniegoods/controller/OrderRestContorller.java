@@ -25,8 +25,6 @@ public class OrderRestContorller {
     // 로그인한 유저 정보 얻고싶을때 @AuthenticationPrincipal UserEntity user 이렇게 할것
     public ResponseEntity<OrderEntity> createOrder(@AuthenticationPrincipal UserEntity user, @RequestBody OrderRequestDto dto) {
 
-        System.out.println("USER: " + user);
-
         return ResponseEntity.ok(orderService.createOrder(user, dto));
     }
 	
