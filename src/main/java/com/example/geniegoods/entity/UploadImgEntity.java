@@ -34,11 +34,11 @@ public class UploadImgEntity {
     @Column(nullable = false)
     private Long uploadImgSize;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "upload_group_id", nullable = false)
     private UploadImgGroupEntity uploadImgGroupEntity;
 }

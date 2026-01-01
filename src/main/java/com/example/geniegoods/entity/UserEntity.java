@@ -19,7 +19,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "TB_USER")
-//@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class)
 @ToString
 @Builder
 public class UserEntity implements UserDetails {
@@ -45,8 +45,9 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String socialId;
 
+    @Builder.Default
     @Column
-    private String profileUrl;
+    private String profileUrl = null;
 
     @Builder.Default
     @Column(nullable = false, length = 50)

@@ -19,5 +19,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	 * @return 사용자 엔티티
 	 */
 	Optional<UserEntity> findBySocialTypeAndSocialId(String socialType, String socialId);
+
+	/**
+	 * 닉네임으로 사용자 조회
+	 * @param nickname 닉네임
+	 * @return 사용자 엔티티
+	 */
+    Optional<UserEntity> findByNickname(String nickname);
 }
 

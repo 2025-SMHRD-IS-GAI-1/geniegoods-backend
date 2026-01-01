@@ -22,6 +22,9 @@ public class OrderEntity {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
+    @Column(name = "ORDER_NUMBER", unique = true, length = 50)
+    private String orderNumber;
+
     @CreatedDate
     @Column(name = "ORDERED_AT")
     private LocalDateTime orderedAt;

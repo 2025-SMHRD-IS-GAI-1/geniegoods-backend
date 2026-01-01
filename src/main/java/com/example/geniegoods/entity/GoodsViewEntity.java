@@ -27,11 +27,11 @@ public class GoodsViewEntity {
     @Column(nullable = false)
     private LocalDateTime viewedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goods_id", nullable = false)
     private GoodsEntity goodsEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private GoodsViewEntity goodsViewEntity;
 
