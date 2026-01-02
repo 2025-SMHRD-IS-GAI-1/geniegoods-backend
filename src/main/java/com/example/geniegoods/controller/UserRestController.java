@@ -1,6 +1,7 @@
 package com.example.geniegoods.controller;
 
 import com.example.geniegoods.dto.user.NickCheckResponseDTO;
+import com.example.geniegoods.dto.user.NickUpdateResponseDTO;
 import com.example.geniegoods.entity.UserEntity;
 import com.example.geniegoods.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,22 +35,23 @@ public class UserRestController {
      * 닉네임 중복 확인
      */
     @GetMapping("/nickname/check")
-    public ResponseEntity<Map<String, Object>> checkNicknameDuplicate(
+    public ResponseEntity<NickCheckResponseDTO> checkNicknameDuplicate(
             @RequestParam("nickname") String nickname,
             @AuthenticationPrincipal UserEntity currentUser) {
-        Map<String, Object> response = new HashMap<>();
+
+        NickCheckResponseDTO response = new NickCheckResponseDTO();
 
         // 현재 사용자의 닉네임과 같으면 사용 가능
         if (currentUser != null && currentUser.getNickname().equals(nickname)) {
-            response.put("available", false);
-            response.put("message", "현재 사용 중인 닉네임입니다.");
+            response.setAvailable(false);
+            response.setMessage("현재 사용 중인 닉네임입니다.");
             return ResponseEntity.ok(response);
         }
 
         // 닉네임 중복 확인
         boolean exists = userService.isNicknameExists(nickname);
-        response.put("available", !exists);
-        response.put("message", exists ? "이미 사용 중인 닉네임입니다." : "사용 가능한 닉네임입니다.");
+        response.setAvailable(!exists);
+        response.setMessage(exists ? "이미 사용 중인 닉네임입니다." : "사용 가능한 닉네임입니다.");
 
         return ResponseEntity.ok(response);
     }
@@ -58,11 +60,11 @@ public class UserRestController {
      * 닉네임 변경
      */
     @GetMapping("/nickname/update")
-    public ResponseEntity<NickCheckResponseDTO> updateNickname(
+    public ResponseEntity<NickUpdateResponseDTO> updateNickname(
             @RequestParam("nickname") String newNickname,
             @AuthenticationPrincipal UserEntity currentUser) {
 
-        NickCheckResponseDTO response = new NickCheckResponseDTO();
+        NickUpdateResponseDTO response = new NickUpdateResponseDTO();
 
         // validation
         // 프론트쪽에서 무슨 요청을 보낼지 모르니 모든 경우의 수를 막아야 함
