@@ -1,6 +1,5 @@
 package com.example.geniegoods.dto.user;
 
-
 import lombok.*;
 
 @Getter
@@ -9,7 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class NickCheckResponseDTO {
-    private boolean available;
+public class NickUpdateResponseDTO {
+    private String status;
+
     private String message;
 }
