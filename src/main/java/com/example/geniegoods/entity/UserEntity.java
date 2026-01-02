@@ -2,6 +2,8 @@ package com.example.geniegoods.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.type.descriptor.jdbc.TinyIntJdbcType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,6 +55,12 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false, length = 50)
     @org.hibernate.annotations.ColumnDefault("'USER'")
     private String role = "USER";
+    
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     /**
      * 사용자 권한 반환
@@ -110,7 +118,8 @@ public class UserEntity implements UserDetails {
      */
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+    	return !deleted;
+//        return true;
     }
 
     /**

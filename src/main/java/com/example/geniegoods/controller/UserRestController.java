@@ -147,4 +147,35 @@ public class UserRestController {
             return ResponseEntity.internalServerError().body(errorResponse);
         }
     }
+  
+  	/**
+	 * 회원탈퇴
+	 */
+	@DeleteMapping("/me/withdraw")
+	public ResponseEntity<Map<String, String>> withdraw(
+	        @AuthenticationPrincipal UserEntity currentUser) {
+	    
+	    Map<String, String> response = new HashMap<>();   // ← new HashMap<>() 로 바꾸기!
+
+	    if (currentUser == null) {
+	        response.put("message", "로그인된 사용자가 없습니다.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
+
+	    if (currentUser.isDeleted()) {
+	        response.put("message", "이미 탈퇴 처리된 계정입니다.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
+
+	    try {
+	        userService.withdrawUser(currentUser.getUserId());
+	        response.put("message", "회원탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.");
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        log.error("회원탈퇴 처리 중 오류 발생", e);
+	        response.put("message", "탈퇴 처리 중 오류가 발생했습니다.");
+	        return ResponseEntity.internalServerError().body(response);
+	    }
+	}
+
 }
