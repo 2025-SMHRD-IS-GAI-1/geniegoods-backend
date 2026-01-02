@@ -41,7 +41,7 @@ public class GoodsEntity {
 
     @Column(name = "PROMPT")
     private String prompt;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity user;
