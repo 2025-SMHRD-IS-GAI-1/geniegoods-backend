@@ -39,7 +39,8 @@ public class GoodsEntity {
     @Column(name = "GOODS_IMG_SIZE")
     private Long goodsImgSize;
 
-    @Column(name = "PROMPT")
+    @Lob
+    @Column(name = "PROMPT", columnDefinition = "TEXT")
     private String prompt;
     
     @ManyToOne(fetch = FetchType.LAZY)
